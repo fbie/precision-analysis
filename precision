@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+python precision.py watch-rsvp-data/*-precision.csv > precision.csv
