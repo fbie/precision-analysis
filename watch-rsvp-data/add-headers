@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function replace {
+    for f in $(ls *-$1.csv)
+    do
+	hdr=$(cat $1-header.csv)
+	if [ ! "$hdr" = "$(head -n 1 $f)" ]
+	then
+	    echo "Adding header to $f..."
+	    echo "$hdr" > tmp
+	    cat $f >> tmp
+	    mv tmp $f
+	fi
+    done
+}
+
+replace precision
+replace connect
+replace direction
