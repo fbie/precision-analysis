@@ -67,13 +67,13 @@ def _theta_rms(coords, z):
 def _theta_rms2(dists, z):
     if len(dists):
         return math.sqrt(np.mean([_visual_angle2(d, z) ** 2 for d in dists]))
-    return 0.0
+    return float('nan')
 
 def _accuracy(coords, z):
     n = len(coords) - 1
     if 0 < n:
         return np.mean([_visual_angle(coords[i], coords[i+1], z) for i in xrange(n)])
-    return 0.0
+    return float('nan')
 
 def _dist(xa, ya, xb, yb):
     return math.sqrt((xa - xb) ** 2 + (ya - yb) ** 2) ** 2
