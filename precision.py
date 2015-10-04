@@ -65,10 +65,15 @@ def _theta_rms(coords, z):
     return _theta_rms2([coords[i+1] - coords[i] for i in xrange(len(coords) - 1)], z)
 
 def _theta_rms2(dists, z):
-    return math.sqrt(np.mean([_visual_angle2(d, z) ** 2 for d in dists]))
+    if len(dists):
+        return math.sqrt(np.mean([_visual_angle2(d, z) ** 2 for d in dists]))
+    return 0.0
 
 def _accuracy(coords, z):
-    return np.mean([_visual_angle(coords[i], coords[i+1], z) for i in xrange(len(coords) - 1)])
+    n = len(coords) - 1
+    if 0 < n:
+        return np.mean([_visual_angle(coords[i], coords[i+1], z) for i in xrange(n)])
+    return 0.0
 
 def _dist(xa, ya, xb, yb):
     return math.sqrt((xa - xb) ** 2 + (ya - yb) ** 2) ** 2
@@ -86,7 +91,7 @@ def _csv(files):
                                _accuracy([_px_to_mm(y) for x, y in cluster], z_avg_mm),
                                sum(map(len, clusters))])
         n += 1
-    print 'n,name,theta_RMS_x,theta_RMS_y,accuracy_x,accuracy_y,samples'
+    print 'n;name;theta_RMS_x;theta_RMS_y;accuracy_x;accuracy_y;samples'
     for a in aggregates:
         print ';'.join(map(lambda x: x.replace('.', ','), map(str, a)))
 
