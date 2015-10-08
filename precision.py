@@ -103,7 +103,7 @@ def _csv(files):
                                _theta_rms([_px_to_mm(y) for x, y in cluster], z_avg_mm),
                                _accuracy([_px_to_mm(x) for x, y in cluster], z_avg_mm),
                                _accuracy([_px_to_mm(y) for x, y in cluster], z_avg_mm),
-                               sum(map(len, clusters))])
+                               sum(map(len, cluster))])
         n += 1
     print 'n;name;theta_RMS_x;theta_RMS_y;accuracy_x;accuracy_y;samples'
     for a in aggregates:
