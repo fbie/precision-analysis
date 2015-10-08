@@ -6,10 +6,11 @@ import math
 import numpy as np
 
 class Frame:
-    def __init__(self, x, y, t):
+    def __init__(self, x, y, t, a):
         self._x = x
         self._y = y
         self._t = t
+        self._a = a
 
     def x(self):
         return self._x
@@ -20,6 +21,9 @@ class Frame:
     def tracking(self):
         return self._t and (self._x != 0 and self._y != 0)
 
+    def target(self):
+        return self._a
+
     def toCoords(self):
         return self._x, self._y
 
@@ -27,12 +31,22 @@ def _line_to_frame(l):
     es = l.split(";")
     c = es[-1][1:-2]
     x, y = c.split(',')
-    return Frame(float(x), float(y), (es[-3] == 'true'))
+    return Frame(float(x), float(y), (es[-3] == 'true'), es[2])
 
 def _files_to_clusters(files):
     clusters = []
     for file in files:
-        clusters.append(map(Frame.toCoords, filter(Frame.tracking, map(_line_to_frame, [line for line in open(file)][1:]))))
+        frames = filter(Frame.tracking, map(_line_to_frame, [line for line in open(file)][1:]))
+        last = None
+        cluster = []
+        for frame in frames:
+            if last and last.target() != frame.target():
+                clusters.append(cluster)
+                cluster = []
+            last = frame
+            cluster.append(frame.toCoords())
+        if cluster != []:
+            clusters.append(cluster)
     return clusters
 
 # Constants for screen size computation
